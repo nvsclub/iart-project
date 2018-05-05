@@ -31,33 +31,14 @@ class Set:
   
   def calculate_heuristic(self):
     self.heuristic = 0
-    for line in self.representation:
-      usedLine = False
-      lineCount = 0
-      for position in line:
-          if position != 0 and not usedLine: # Adds if line is used
-            self.heuristic += 2
-            usedLine = True
-          
-          if position == 0:
-            lineCount += 1
 
-          if position > 0 and lineCount > 0: # Adds per 0 gap in line
-            self.heuristic += lineCount
-            lineCount = 0
-          
-          if position > 1: # Adds per overlap space
-            self.heuristic += position ** 2
+    for y in range(self.height):
+      for x in range(self.width):
+        if self.representation[y][x] > 1: # Adds per overlap space
+          self.heuristic += self.representation[y][x] * self.width * self.height
 
-    for x in range(self.width):
-      columnCount = 0
-      for y in range(self.height):
-        if self.representation[y][x] == 0:
-          columnCount += 1
-
-        if self.representation[y][x] > 0 and columnCount > 0: # Adds per 0 gap in column
-          self.heuristic += columnCount
-          columnCount = 0
+        if self.representation[y][x] == 1:
+          self.heuristic += x + y * self.width
 
 
 
@@ -93,7 +74,7 @@ class Object:
         self.grid[i][j] = 1
         
   def move(self, dx, dy):
-    if dx + self.x >= self.set.width or dy + self.y >= self.set.height or dx + self.x < 0 or dy + self.y < 0:
+    if dx + self.x + self.width - 1 >= self.set.width or dy + self.y + self.height - 1 >= self.set.height or dx + self.x < 0 or dy + self.y < 0:
       return 
     else:
       self.x += dx

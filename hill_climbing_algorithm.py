@@ -23,7 +23,7 @@ def new_sucessor(placa, dx, dy, item):
 def find_best(sucessores):
     min = sucessores[0].heuristic
     for x in sucessores:
-        if x.heuristic < min:
+        if x.heuristic <= min:
             melhor = x
             min = melhor.heuristic
 
@@ -41,6 +41,7 @@ def main():
     placa = ps.Set(10, 10, objects)
     print(placa)
     while(True):
+        print('##########################################################\n')
         sucessores = list_sucessors(placa)
         for x in sucessores:
             print(x)
@@ -51,6 +52,7 @@ def main():
         else:
             break
 
+    print('########################## BEST ##########################\n')
     print(placa)
     print(str(placa.heuristic) + "\n")
 
