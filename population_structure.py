@@ -67,7 +67,7 @@ class Object:
     return to_print
 
   def generate_grid(self):
-    self.grid = [[0 for i in range(self.set.height)] for j in range(self.set.width)]
+    self.grid = [[0 for i in range(self.set.width)] for j in range(self.set.height)]
 
     for i in range(self.y, self.y + self.height):
       for j in range(self.x, self.x + self.width):

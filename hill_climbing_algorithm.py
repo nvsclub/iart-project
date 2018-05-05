@@ -1,6 +1,7 @@
 import random
 import copy
 import population_structure as ps
+import ui
 
 def list_sucessors(placa):
     sucessores = []
@@ -34,26 +35,20 @@ def find_best(sucessores):
 
 
 def main():
+    objects = [[3, 3], [5, 5], [4, 3], [6, 7], [1,8]]
 
-
-    objects = [[3, 3], [3, 3], [3, 3]]
-
-    placa = ps.Set(10, 10, objects)
+    placa = ps.Set(20, 20, objects)
     print(placa)
     while(True):
-        print('##########################################################\n')
         sucessores = list_sucessors(placa)
-        for x in sucessores:
-            print(x)
-            print(str(x.heuristic) + "\n")
         melhor = find_best(sucessores)
+        ui.print_set(melhor)
         if (placa.heuristic > melhor.heuristic):
             placa = melhor
         else:
             break
 
-    print('########################## BEST ##########################\n')
-    print(placa)
-    print(str(placa.heuristic) + "\n")
+    ui.print_div('BEST ITERATION')
+    ui.print_set(placa)
 
 main()
