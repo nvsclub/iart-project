@@ -1,14 +1,7 @@
 import random
+import copy
 
-# define
-grid_length = 10
-grid_width = 10
-
-no_cycles = 0
-max_fitness = 0
-
-
-class Individual:
+class Set:
   def __init__(self, grid_length, grid_width, requested_objects):
     self.items = []
     self.length = grid_length
@@ -29,7 +22,7 @@ class Individual:
     return to_print
 
   def generate_representation(self):
-    self.representation = self.items[0].grid
+    self.representation = copy.deepcopy(self.items[0].grid)
 
     for i in range(1, len(self.items)):
       for j in range(self.length):
@@ -38,8 +31,8 @@ class Individual:
 
 
 class Object:
-  def __init__(self, grid, position):
-    self.grid = grid
+  def __init__(self, set, position):
+    self.set = set
 
     if 0.5 > random.random():
       self.length = position[0]
@@ -48,10 +41,10 @@ class Object:
       self.length = position[1]
       self.width = position[0]
 
-    x = random.randint(0, self.grid.width - self.width - 1)
-    y = random.randint(0, self.grid.length - self.length - 1)
+    self.x = random.randint(0, self.set.width - self.width - 1)
+    self.y = random.randint(0, self.set.length - self.length - 1)
 
-    self.generate_grid(x, y)
+    self.generate_grid()
 
   def __str__(self):
     to_print = ''
@@ -61,9 +54,18 @@ class Object:
       to_print += '\n'
     return to_print
 
-  def generate_grid(self, x, y):
-    self.grid = [[0 for x in range(self.grid.length)] for y in range(self.grid.width)]
+  def generate_grid(self):
+    self.grid = [[0 for i in range(self.set.length)] for j in range(self.set.width)]
 
-    for i in range(x, x + self.width):
-      for j in range(y, y + self.length):
+    for i in range(self.x, self.x + self.width):
+      for j in range(self.y, self.y + self.length):
         self.grid[i][j] = 1
+
+  def move_object(self, dx, dy):
+    if dx + self.x >= self.set.width or dy + self.y >= self.set.length or dx + self.x < 0 or dy + self.y < 0:
+      return 
+    else:
+      self.x += dx
+      self.y += dy
+      self.generate_grid()
+    

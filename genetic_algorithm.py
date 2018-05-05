@@ -11,14 +11,19 @@ max_fitness = 0
 
 def main():
 
-    objects = [[1, 1], [4, 3], [1, 4]]
 
-    a = ps.Individual(grid_length, grid_width, objects)
+    objects = [[3,3],[2,4]]
 
-    # for item in a.items:
-    #	print(item)
-
+    a = ps.Set(grid_length, grid_width, objects)
+    '''
     print(a)
+    a.items[0].move_object(6,6)
+    a.generate_representation()
+    print(a)'''
 
+
+
+    for item in a.items:
+      print(item)
 
 main()
