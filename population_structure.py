@@ -59,7 +59,6 @@ class Object:
 
     for i in range(self.y, self.y + self.length):
       for j in range(self.x, self.x + self.width):
-        print(i,j)
         self.grid[i][j] = 1
         
   def move(self, dx, dy):
