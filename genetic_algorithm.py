@@ -5,25 +5,30 @@ import population_structure as ps
 grid_length = 10
 grid_width = 10
 
-no_cycles = 0
-max_fitness = 0
+population_size = 20
 
+def minimum_sizes(objects, grid_length, grid_width):
+  total_area = 0
+  for o in objects:
+    total_area += o[0] * o[1]
+  
+  return [total_area/grid_length, total_area/grid_width]
 
 def main():
+  # test objects
+  objects = [[3,3],[2,4], [1,2]]
+
+  # population initialization
+  population = []
+  for _ in range(1, population_size):
+    individual = ps.Set(grid_length, grid_width, objects)
+    population.append(individual)
+
+  # calculate minimum rows/columns
+  [rows, columns] = minimum_sizes(objects, grid_length, grid_width)
+
+  print(rows, columns)
 
 
-    objects = [[3,3],[2,4]]
-
-    a = ps.Set(grid_length, grid_width, objects)
-    '''
-    print(a)
-    a.items[0].move_object(6,6)
-    a.generate_representation()
-    print(a)'''
-
-
-
-    for item in a.items:
-      print(item)
 
 main()

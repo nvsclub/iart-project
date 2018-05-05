@@ -57,11 +57,11 @@ class Object:
   def generate_grid(self):
     self.grid = [[0 for i in range(self.set.length)] for j in range(self.set.width)]
 
-    for i in range(self.x, self.x + self.width):
-      for j in range(self.y, self.y + self.length):
+    for i in range(self.y, self.y + self.width):
+      for j in range(self.x, self.x + self.length):
         self.grid[i][j] = 1
 
-  def move_object(self, dx, dy):
+  def move(self, dx, dy):
     if dx + self.x >= self.set.width or dy + self.y >= self.set.length or dx + self.x < 0 or dy + self.y < 0:
       return 
     else:
