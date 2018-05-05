@@ -1,54 +1,57 @@
 import random
+import copy
 import population_structure as ps
 
-class item:
-    def __init__(self, n, m, n_objeto, m_objeto):
-        self.grid = [[0 for x in range(n)] for y in range(m)]
-        self.x_i = random.randint(0, n - n_objeto)
-        self.y_i = random.randint(0, m - m_objeto)
-        for x  in range(self.x_i, self.x_i + n_objeto):
-            for y in range(self.y_i, self.y_i + m_objeto):
-                self.grid[x][y] = 1
-
-    def __str__(self):
-        to_print = ''
-        for line in self.grid:
-            for position in line:
-                to_print += str(position)
-            to_print += '\n'
-        return to_print
+def list_sucessors(placa):
+    sucessores = []
+    for i in range(0, len(placa.items)):
+        sucessores.append(new_sucessor(placa, 1, 0, i))
+        sucessores.append(new_sucessor(placa, -1, 0, i))
+        sucessores.append(new_sucessor(placa, 0, 1, i))
+        sucessores.append(new_sucessor(placa, 0, -1, i))
+    return sucessores
 
 
-class tabua:
-
-    def __init__(self, n, m):
-        tabua.n = n
-        tabua.m = n
-        self.grid = [[0 for x in range(n)] for y in range(m)]
-
-    def __str__(self):
-        to_print = ''
-        for line in self.grid:
-            for position in line:
-                to_print += str(position)
-            to_print += '\n'
-        return to_print
-
-    def adiciona_objetos(self, objs):
-        for x in range(tabua.n):
-            for y in range(tabua.m):
-                for obj in self.objetos:
-                    tabua.grid[x][y] += objs[obj].grid[x][y]
+def new_sucessor(placa, dx, dy, item):
+    sucessor = copy.deepcopy(placa)
+    sucessor.items[item].move(dx, dy)
+    sucessor.generate_representation()
+    sucessor.calculate_heuristic()
+    return sucessor
 
 
-objetos = []
+def find_best(sucessores):
+    min = sucessores[0].heuristic
+    for x in sucessores:
+        if x.heuristic < min:
+            melhor = x
+            min = melhor.heuristic
 
-for x in range(0, 4):
-    objetos.append(item(10, 10, 5, 5))
-    print(objetos[x])
-
-placa = tabua(10, 10)
-placa.adiciona_objetos(objetos)
+    return melhor
 
 
-print(placa)
+
+
+
+def main():
+
+
+    objects = [[3, 3], [3, 3], [3, 3]]
+
+    placa = ps.Set(10, 10, objects)
+    print(placa)
+    while(True):
+        sucessores = list_sucessors(placa)
+        for x in sucessores:
+            print(x)
+            print(str(x.heuristic) + "\n")
+        melhor = find_best(sucessores)
+        if (placa.heuristic > melhor.heuristic):
+            placa = melhor
+        else:
+            break
+
+    print(placa)
+    print(str(placa.heuristic) + "\n")
+
+main()
