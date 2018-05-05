@@ -15,10 +15,9 @@ class Individual:
     self.width = grid_width
 
     for request in requested_objects:
-      self.items.append(Object(self.length, self.width, request))
+      self.items.append(Object(self, request))
 
-    self.representation = concat_objects(
-      self.length, self.width, self.items)
+    self.generate_representation()
     self.fitness = 0
 
   def __str__(self):
@@ -29,23 +28,30 @@ class Individual:
       to_print += '\n'
     return to_print
 
+  def generate_representation(self):
+    self.representation = self.items[0].grid
+
+    for i in range(1, len(self.items)):
+      for j in range(self.length):
+        for k in range(self.width):
+          self.representation[j][k] += self.items[i].grid[j][k]
+
 
 class Object:
-  def __init__(self, grid_lenght, grid_width, request):
+  def __init__(self, grid, position):
+    self.grid = grid
+
     if 0.5 > random.random():
-      self.length = request[0]
-      self.width = request[1]
+      self.length = position[0]
+      self.width = position[1]
     else:
-      self.length = request[1]
-      self.width = request[0]
+      self.length = position[1]
+      self.width = position[0]
 
-    self.grid = init_grid(grid_length, grid_width)
+    x = random.randint(0, self.grid.width - self.width - 1)
+    y = random.randint(0, self.grid.length - self.length - 1)
 
-    x = random.randint(0, grid_width - self.width - 1)
-    y = random.randint(0, grid_length - self.length - 1)
-
-    self.grid = positioning_object(
-      self.grid, self.length, self.width, x, y)
+    self.generate_grid(x, y)
 
   def __str__(self):
     to_print = ''
@@ -55,28 +61,9 @@ class Object:
       to_print += '\n'
     return to_print
 
-# initialize a grid with given sizes
+  def generate_grid(self, x, y):
+    self.grid = [[0 for x in range(self.grid.length)] for y in range(self.grid.width)]
 
-
-def init_grid(g_length, g_width):
-  return[[0 for x in range(g_length)] for y in range(g_width)]
-
-
-def positioning_object(grid, length, width, x, y):
-  for i in range(x, x + width):
-    for j in range(y, y + length):
-      grid[i][j] = 1
-  return grid
-
-# concatenate the grids
-
-
-def concat_objects(grid_lenght, grid_width, items):
-  concated_grid = items[0].grid
-
-  for i in range(1, len(items)):
-    for j in range(grid_lenght):
-      for k in range(grid_width):
-        concated_grid[j][k] += items[i].grid[j][k]
-
-  return concated_grid
+    for i in range(x, x + self.width):
+      for j in range(y, y + self.length):
+        self.grid[i][j] = 1
