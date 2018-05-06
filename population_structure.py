@@ -80,4 +80,13 @@ class Object:
       self.x += dx
       self.y += dy
       self.generate_grid()
-    
+      
+  # falta rodar sobre varios eixos
+  def rotate(self):
+    if self.x + self.height >= self.set.width or self.y + self.width >= self.set.height:
+      return
+    else:
+      a = self.width
+      self.width = self.height
+      self.height = a
+      self.generate_grid()  
