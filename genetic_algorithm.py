@@ -1,6 +1,10 @@
 import random
-import population_structure as ps
 import copy
+
+import population_structure as ps
+import ui
+
+
 
 # define
 grid_height = 10
@@ -11,9 +15,9 @@ limit_of_generations = 10000
 fitness_limit = 5000
 no_stable_generations = 1000
 
-elitist_rate = 0.05
-survival_rate = 0.2
-mutation_rate = 0.05
+elitist_rate = 0.2
+survival_rate = 0.3
+mutation_rate = 0.2
 
 def regenerate_representation(population):
   for individual in population:
@@ -63,68 +67,69 @@ def mutation(population):
   return population
     
 def mutate(individual):
-  no_list = [-3, -2, -2, -1, -1, -1, 1, 1, 1, 2, 2, 3]
+  # list possible mutations and their frequency
+  # #no_list = [-3, -2, -2, -1, -1, -1, -1, -1, -1, 1, 1, 1, 1, 1, 1, 2, 2, 3]
+  no_list = [-1, 1]
   if random.random() < mutation_rate:
-      if random.random() > 0.5:
+      # generate a random object from the list (items) to mutate
+      chosen_object = random.randint(0, len(individual.items)-1)
+
+      # if there is a mutation choose a random mutation direction or a rotational one
+      # # x direction
+      if random.random() < 0.33:
         dx = no_list[random.randint(0,len(no_list)-1)]
         dy = 0
-      else:
+        individual.items[chosen_object].move(dx, dy)
+      # # y direction
+      elif random.random() < 0.66:
         dy = no_list[random.randint(0,len(no_list)-1)]
         dx = 0
-      chosen_object = random.randint(0, len(individual.items)-1)
-      if dx + individual.items[chosen_object].x >= individual.items[chosen_object].set.width or dy + individual.items[chosen_object].y >= individual.items[chosen_object].set.height or dx + individual.items[chosen_object].x < 0 or dy + individual.items[chosen_object].y < 0:
-        pass
-      else:
         individual.items[chosen_object].move(dx, dy)
-
-      if random.random() > 0.5:
+      # # rotation on the top left vertice
+      else:
         individual.items[chosen_object].rotate()
 
       return mutate(individual)
-  
-def print_population(population):
-  for individual in population:
-    print(individual)
-
-def print_best(population):
-  print(population[0])
-  print(population[0].heuristic)
 
 def main():
   # test objects
-  items = [[3,1], [3,1], [3,1], [3,1]]
+  items = [[3,1], [3,1], [3,1], [3,1], [3,1], [3,1], [3,1], [3,1], [3,1], [3,1]]
 
   # population initialization
   population = []
   stable_point = 0
+  best = 99999
   for _ in range(population_size):
     individual = ps.Set(grid_height, grid_width, items)
     population.append(individual)
 
   # run though generations
   for generation in range(limit_of_generations):
+    # refresh population fitnesses and representations
     regenerate_representation(population)
     refresh_fitness(population)
 
-    '''if population[0].heuristic <= fitness_limit:
-      print_best(population)
-      print(generation)
-      break'''
+    # ui interface
+    if population[0].heuristic < best:
+      best = population[0].heuristic
+      ui.print_set(population[0])
 
+    # exiting clauses
+    # # stabilization arround a certain heuristic
     if population[0].heuristic != stable_point:
       stable_point = population[0].heuristic
       stable_generation = generation
-
     if generation - stable_generation >= no_stable_generations:
-      print('population stabilized')
-      print_best(population)
       break
 
-    population = selection(population)
+    # # hitting the fitness limit # obsolete
+    '''if population[0].heuristic <= fitness_limit:
+      break'''
 
+    # calculate next generation
+    population = selection(population)
     population = crossover(population)
     population = mutation(population)
-
 
 
 main()
