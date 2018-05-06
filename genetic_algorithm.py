@@ -76,6 +76,10 @@ def mutate(individual):
         pass
       else:
         individual.items[chosen_object].move(dx, dy)
+
+      if random.random() > 0.5:
+        individual.items[chosen_object].rotate()
+
       return mutate(individual)
   
 def print_population(population):
