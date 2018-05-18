@@ -38,10 +38,7 @@ def find_best(successors):
 
     return best
 
-def main():
-    objects = [[3, 3], [3, 3], [4, 3], [2,5], [1,3]]
-
-    set = ps.Set(10, 10, objects)
+def main(set):
     while(True):
         successors = list_successors(set)
         best = find_best(successors)
@@ -53,5 +50,3 @@ def main():
 
     ui.print_div('BEST ITERATION')
     ui.print_set(set)
-
-main()
