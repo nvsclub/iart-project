@@ -39,6 +39,7 @@ def main(grid_height, grid_width, requested_objects):
             set = best
         else:
             break
+            
     print("novo set: ")
     ui.print_set(set)
     print("heuristica: " + str(best.heuristic))
