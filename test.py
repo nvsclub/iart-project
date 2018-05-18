@@ -2,11 +2,12 @@ import population_structure as ps
 import ui
 
 # test objects
-items = [[2,2], [3,1], [2,1], [1,1], [2,1], [1,3], [2,1], [3,1]]
+items = [[1,1], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [1,1]]
 grid_height = 10
 grid_width = 10
 
-individual = ps.Set(grid_height, grid_width, items)
+individual = ps.Set(grid_height, grid_width, items, False)
+individual.shuffle()
 
 individual.place_objects()
 
