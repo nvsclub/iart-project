@@ -8,14 +8,14 @@ import ui
 grid_height = 10
 grid_width = 10
 
-population_size = 1
-limit_of_generations = 50
+population_size = 30
+limit_of_generations = 1000
 fitness_limit = 5000
 no_stable_generations = 1000
 
-elitist_rate = 0.2
-survival_rate = 0.3
-mutation_rate = 0.2
+elitist_rate = 0.1
+survival_rate = 0.5
+mutation_rate = 1
 
 def fitness_and_placement(population):
   for individual in population:
@@ -23,7 +23,8 @@ def fitness_and_placement(population):
     #if individual.place_objects() == -1:
       #print("Incompatible Solution")
   return population
-'''
+
+
 def selection(population):
   population = sorted(population, key=lambda individual: individual.heuristic, reverse=False)
   
@@ -38,20 +39,22 @@ def selection(population):
 def crossover(population):
   while len(population) < population_size:
     parent1 = random.randint(0, len(population)-1)
-    #parent2 = random.randint(0, len(population))
+    parent2 = random.randint(0, len(population)-1)
 
     individual = copy.deepcopy(population[parent1])
 
+    crossover_point = random.randint(0, len(population[parent2].items))
+    individual.items[:crossover_point]
+
+    for item_in_parent in population[parent1].items:
+      if item_in_parent in individual.items:
+        continue
+      else:
+        individual.items.append(copy.deepcopy(item_in_parent))
+
     population.append(individual)
 
-    #crossover_point = random.randint(0, len(population[parent2].items))
-
-    #individual.items = individual.items[:crossover_point]
-
-    #for o in range(crossover_point, len(population[parent2].items)):
-    #  individual.items.append(copy.deepcopy(population[parent2].items[o]))
-
-    return population
+  return population
 
 def mutation(population):
   i=0
@@ -63,43 +66,48 @@ def mutation(population):
     i+=1
   return population
 
-'''
+
 def main():
   # test objects
-  items = [[2,2], [3,1], [2,1], [1,1], [2,1], [1,3], [2,1], [3,1]]
+  items = [[1,1], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [1,1]]
 
   # population initialization
   population = []
   stable_point = 0
   best = 99999
   for _ in range(population_size):
-    individual = ps.Set(grid_height, grid_width, items)
+    individual = ps.Set(grid_height, grid_width, items, False)
+    individual.shuffle()
     population.append(individual)
 
   # run though generations
   for generation in range(limit_of_generations):
+    heuristics = []
+    for individual in population:
+      heuristics.append(individual.heuristic)
+
+    print(generation, heuristics)
     # refresh population fitnesses and representations
     fitness_and_placement(population)
-    for i in range(population_size):
-      ui.print_set(population[i])
-  # ui interface
-  '''if population[0].heuristic < best:
-    best = population[0].heuristic
-    ui.print_set(population[0])'''
+
+    # ui interface
+    if population[0].heuristic < best:
+      best = population[0].heuristic
+      ui.print_set(population[0])
 
 
 
-  # exiting clauses
-  # # stabilization arround a certain heuristic
-  '''if population[0].heuristic != stable_point:
-    stable_point = population[0].heuristic
-    stable_generation = generation
-  if generation - stable_generation >= no_stable_generations:
-    break'''
+    # exiting clauses
+    # # stabilization arround a certain heuristic
+    '''if population[0].heuristic != stable_point:
+      stable_point = population[0].heuristic
+      stable_generation = generation
+    if generation - stable_generation >= no_stable_generations:
+      break'''
 
-  # calculate next generation
-  #population = selection(population)
-  #population = crossover(population)
+    # calculate next generation
+    population = selection(population)
+    population = crossover(population)
 
 
 main()

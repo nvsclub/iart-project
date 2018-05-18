@@ -6,12 +6,12 @@ class Set:
     self.items = []
     self.height = grid_height
     self.width = grid_width
+    self.heuristic = 0
 
-    for request in requested_objects:
-      self.items.append(Object(self, request, is_random))
+    for i in range(len(requested_objects)):
+      self.items.append(Object(self, i, requested_objects[i], is_random))
 
     self.generate_representation()
-    self.calculate_heuristic()
 
   def __str__(self):
     to_print = ''
@@ -20,6 +20,9 @@ class Set:
         to_print += str(position) + ' '
       to_print += '\n'
     return to_print
+
+  def shuffle(self):
+    random.shuffle(self.items)
 
   def generate_representation(self):
     self.representation = [[0 for i in range(self.width)] for j in range(self.height)]
@@ -36,13 +39,13 @@ class Set:
     for item in self.items:
       item.grid = None
   
-  def calculate_heuristic(self):
+  def calculate_old_heuristic(self):
     self.heuristic = 0
     for y in range(self.height):
       line_val = 5
       for x in range(self.width):
         if self.representation[y][x] > 1:
-          self.heuristic += -(self.representation[y][x] ** 12)
+          self.heuristic += -(self.representation[y][x] ** 5)
         if self.representation[y][x] == 1:
           self.heuristic += 2 ** (self.height - y)
           line_val *= 2
@@ -60,7 +63,25 @@ class Set:
           self.heuristic += col_val
           col_val = 2
 
-
+  def calculate_heuristic(self, bestHeuristic):
+    self.heuristic = bestHeuristic
+    for y in range(self.height):
+      consecutive_zeros = 0
+      for x in range(self.width):
+        if self.representation[y][x] == 0:
+          consecutive_zeros += 1
+        if self.representation[y][x] == 1 and consecutive_zeros > 0:
+          self.heuristic += consecutive_zeros
+          consecutive_zeros = 0
+          
+    for x in range(self.height):
+      consecutive_zeros = 0
+      for y in range(self.width):
+        if self.representation[y][x] == 0:
+          consecutive_zeros += 1
+        if self.representation[y][x] == 1 and consecutive_zeros > 0:
+          self.heuristic += consecutive_zeros
+          consecutive_zeros = 0
 
   def place_objects(self):
     self.representation_reset()
@@ -75,8 +96,9 @@ class Set:
       item.place(best_pivot[0], best_pivot[1], rotate)
       
       self.generate_representation()
-      self.heuristic = best_heuristic
 
+    self.calculate_heuristic(best_heuristic)
+    
     return
 
   def get_pivot_points(self):
@@ -162,17 +184,18 @@ class Set:
         max_used_height = used_height
         
     max_used_height += 1
-    max_used_width += 1
 
     return max_used_height * max_used_width + max_used_height + max_used_width + bias_sobreposition
 
 
 class Object:
-  def __init__(self, set, size, is_random):
+  def __init__(self, set, id, size, is_random):
     self.set = set
 
     self.height = size[1]
     self.width = size[0]
+
+    self.id = id
 
     if is_random:
       self.x = random.randint(0, self.set.width - self.width - 1)
@@ -190,6 +213,9 @@ class Object:
         to_print += str(position) + ' '
       to_print += '\n'
     return to_print
+
+  def __eq__(self, other):
+    return self.id == other.id
 
   def generate_grid(self):
     if self.x == None or self.y == None:
