@@ -38,7 +38,8 @@ def find_best(successors):
 
     return best
 
-def main(set):
+def main(grid_height, grid_width, requested_objects):
+    set = ps.Set(grid_height, grid_width, requested_objects, True)
     while(True):
         successors = list_successors(set)
         best = find_best(successors)
