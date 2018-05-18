@@ -1,6 +1,5 @@
 import random
 import copy
-import ui
 
 class Set:
   def __init__(self, grid_height, grid_width, requested_objects, is_random):
