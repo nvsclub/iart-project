@@ -1,5 +1,5 @@
 import population_structure as ps
-import hill_climbing_algorithm
+import hill_climbing_old_heuristic
 
 def main():
   option = print_main_menu()
@@ -59,13 +59,10 @@ def choose_algorythm(data):
     print('Invalid option')
     choose_algorythm(data)
   if '1' in option:
-    hill_climbing_algorithm.main(data_to_set(data))
+    hill_climbing_old_heuristic.main(data[0][0], data[0][1], data[1::])
   else:
     print('Invalid option')
     choose_algorythm(data)
-
-def data_to_set(data):
-  return ps.Set(data[0][0], data[0][1], data[1::])
 
 def print_choose_algorythm():
   print('Select option:')

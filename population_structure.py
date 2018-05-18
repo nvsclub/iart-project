@@ -3,13 +3,13 @@ import copy
 import ui
 
 class Set:
-  def __init__(self, grid_height, grid_width, requested_objects):
+  def __init__(self, grid_height, grid_width, requested_objects, is_random):
     self.items = []
     self.height = grid_height
     self.width = grid_width
 
     for request in requested_objects:
-      self.items.append(Object(self, request))
+      self.items.append(Object(self, request, is_random))
 
     self.generate_representation()
     self.calculate_heuristic()
@@ -157,14 +157,18 @@ class Set:
 
 
 class Object:
-  def __init__(self, set, position):
+  def __init__(self, set, size, is_random):
     self.set = set
 
-    self.height = position[1]
-    self.width = position[0]
+    self.height = size[1]
+    self.width = size[0]
 
-    self.x = None
-    self.y = None
+    if is_random:
+      self.x = random.randint(0, self.set.width - self.width - 1)
+      self.y = random.randint(0, self.set.height - self.height - 1)
+    else:
+      self.x = None
+      self.y = None
 
     self.generate_grid()
 
@@ -192,10 +196,8 @@ class Object:
     self.x = x
     self.y = y
     self.generate_grid()
-    
 
-
-  '''def move(self, dx, dy):
+  def move(self, dx, dy):
     if dx + self.x + self.width - 1 >= self.set.width or dy + self.y + self.height - 1 >= self.set.height or dx + self.x < 0 or dy + self.y < 0:
       return 
     else:
@@ -214,4 +216,4 @@ class Object:
 
       self.y = self.y - self.width + 1
       
-      self.generate_grid()  '''
+      self.generate_grid()
