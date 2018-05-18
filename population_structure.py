@@ -31,6 +31,11 @@ class Set:
       for j in range(self.height):
         for k in range(self.width):
           self.representation[j][k] += self.items[i].grid[j][k]
+    
+  def representation_reset(self):
+    self.representation = [[0 for i in range(self.width)] for j in range(self.height)]
+    for item in self.items:
+      item.grid = None
   
   def calculate_heuristic(self):
     self.heuristic = 0
@@ -59,26 +64,27 @@ class Set:
 
 
   def place_objects(self):
+    self.representation_reset()
     for item in self.items:
       pivot_points = self.get_pivot_points()
 
-      print(pivot_points)
+      best_heuristic, best_pivot, rotate = self.best_scenario(item, pivot_points)
 
-      best_heuristic, best_pivot, rotate = self.best_scenario(self, item, pivot_points)
+      if best_heuristic == -1:
+        return -1
 
       item.place(best_pivot[0], best_pivot[1], rotate)
       
       self.generate_representation()
       self.heuristic = best_heuristic
-      ui.print_set(self)
 
     return
 
   def get_pivot_points(self):
     pivots = []
     disable_pivot = False
-
     last_has_one = True
+
     for y in range(self.height):
       first_zero = None
       has_one = False
@@ -95,26 +101,27 @@ class Set:
     
     return pivots
 
-  def best_scenario(self, set, item, pivot_points):
+  def best_scenario(self, item, pivot_points):
     heuristic_list = []
-    best_heuristic = set.width * set.height
+    pivot_no = -1
+    best_heuristic = (self.width+1) * (self.height+1) + (self.width+1) + (self.height+1)
     for pivot in pivot_points:
-      new_representation = copy.deepcopy(set.representation)
-      if pivot[0] + item.width <= set.width and pivot[1] + item.height <= set.height:
+      new_representation = copy.deepcopy(self.representation)
+      if pivot[0] + item.width <= self.width and pivot[1] + item.height <= self.height:
         for x in range(pivot[0], pivot[0] + item.width):
           for y in range(pivot[1], pivot[1] + item.height):
             new_representation[y][x] += 1
-        placement1 = self.case_heuristic(new_representation, set.width, set.height)
+        placement1 = self.case_heuristic(new_representation, self.width, self.height)
       else:
         placement1 = best_heuristic
       heuristic_list.append(placement1) 
 
-      new_representation = copy.deepcopy(set.representation)
-      if pivot[0] + item.height <= set.width and pivot[1] + item.width <= set.height:
+      new_representation = copy.deepcopy(self.representation)
+      if pivot[0] + item.height <= self.width and pivot[1] + item.width <= self.height:
         for x in range(pivot[0], pivot[0] + item.height):
           for y in range(pivot[1], pivot[1] + item.width):
             new_representation[y][x] += 1
-        placement2 = self.case_heuristic(new_representation, set.width, set.height)
+        placement2 = self.case_heuristic(new_representation, self.width, self.height)
       else:
         placement2 = best_heuristic
       heuristic_list.append(placement2)
@@ -125,6 +132,11 @@ class Set:
         best_heuristic = heuristic
         pivot_no = i
       i += 1
+
+    #print(pivot_points)
+
+    if pivot_no == -1:
+      return -1, -1, False
 
     if pivot_no % 2 == 1:
       return best_heuristic, pivot_points[int((pivot_no-1)/2)], True
