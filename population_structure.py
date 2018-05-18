@@ -34,14 +34,29 @@ class Set:
   
   def calculate_heuristic(self):
     self.heuristic = 0
-
     for y in range(self.height):
+      line_val = 5
       for x in range(self.width):
-        if self.representation[y][x] > 1: # Adds per overlap space
-          self.heuristic += self.representation[y][x] * self.width * self.height
-
+        if self.representation[y][x] > 1:
+          self.heuristic += -(self.representation[y][x] ** 12)
         if self.representation[y][x] == 1:
-          self.heuristic += x + y * self.width 
+          self.heuristic += 2 ** (self.height - y)
+          line_val *= 2
+        if self.representation[y][x] == 0 and line_val > 2:
+          self.heuristic += line_val
+          line_val = 2
+
+    for x in range(self.width):
+      col_val = 5
+      for y in range(self.height):
+        if self.representation[y][x] == 1:
+          col_val *= 2
+          self.heuristic += 2 ** (self.width - x)
+        if self.representation[y][x] == 0 and line_val > 2:
+          self.heuristic += col_val
+          col_val = 2
+
+
 
   def place_objects(self):
     for item in self.items:
@@ -190,7 +205,7 @@ class Object:
       
   # falta rodar sobre varios eixos
   def rotate(self):
-    if self.x + self.height >= self.set.width or self.y + self.width >= self.set.height or self.y - self.height + 1 < 0:
+    if self.x + self.height >= self.set.width or self.y + self.width >= self.set.height:
       return
     else:
       a = self.width
