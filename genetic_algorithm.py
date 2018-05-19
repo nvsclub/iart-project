@@ -16,10 +16,7 @@ mutation_rate = 0.1
 
 def fitness_and_placement(population):
   for individual in population:
-    e = individual.place_objects()
-    print(e)
-    #if individual.place_objects() == -1:
-      #print("Incompatible Solution")
+    individual.place_objects()
   return population
 
 
