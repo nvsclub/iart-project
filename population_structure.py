@@ -1,8 +1,6 @@
 import random
 import copy
 import sys
-
-
 class Set:
     def __init__(self, grid_height, grid_width, requested_objects, is_random):
         self.items = []
@@ -150,22 +148,21 @@ class Set:
       for x in range(pivot_x, pivot_x + width):
           for y in range(pivot_y, pivot_y + height):
               representation[y][x] += 1
-      
+
       return self.case_heuristic(representation), [pivot_x, pivot_y]
 
-    def case_heuristic(self, new_representation):
+    def case_heuristic(self, representation):
         max_used_width = self.width
         max_used_height = 0
         bias_sobreposition = 0
         for x in range(self.width):
             empty_column = True
             for y in range(self.height):
-                if new_representation[y][x] == 1:
+                if representation[y][x] >= 1:
                     used_height = y
                     empty_column = False
-                if new_representation[y][x] > 1:
-                    bias_sobreposition = 2 * self.width * self.height
-                    empty_column = True
+                if representation[y][x] > 1:
+                    bias_sobreposition += representation[y][x] * self.width * self.height
             if empty_column:
                 max_used_width = x
                 break

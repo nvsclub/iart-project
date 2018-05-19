@@ -37,16 +37,17 @@ def ciclo_hill_climbing(set):
 
 def main(grid_height, grid_width, requested_objects, arrefecimento):
     set = ps.Set(grid_height, grid_width, requested_objects, False)
+    set.shuffle()
     set.place_objects()
     ui.print_div("INICIAL")
     ui.print_set(set)
-    i= 0
-    while( i <= 50):
+    i = 0
+    while i <= 50:
         set_aux = ciclo_hill_climbing(set)
-        if(i == 0):
+        if i == 0:
             set_final = set_aux
         else:
-            if (set_final.heuristic < set_aux.heuristic):
+            if set_aux.heuristic < set_final.heuristic:
                 set_final = set_aux
                 i = 0
         if arrefecimento == False:

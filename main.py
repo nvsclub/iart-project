@@ -1,8 +1,16 @@
 import population_structure as ps
 import hill_climbing_old_heuristic
 import hill_climbing_new_heuristic
+import genetic_algorithm
+import one_step
+import sys
+import time
 
 def main():
+  if(len(sys.argv) == 2):
+    choose_algorythm(read_file(sys.argv[1]))
+    return
+
   option = print_main_menu()
 
   if len(option) > 2:
@@ -18,14 +26,17 @@ def main():
 
 def read_data():
   print('Files should be placed in files folder, and be of type txt')
-  filepath = 'files/' + input('Name of the file to read? ') + '.txt'
+  choose_algorythm(read_file(input('Name of the file to read? ')))
+
+def read_file(file_name):
+  filepath = 'files/' + file_name + '.txt'
   data = []
   with open(filepath) as fp:
     line = fp.readline()
     while line:
       data.append([int(i) for i in line.strip().split(' ')])
       line = fp.readline()
-  choose_algorythm(data)
+  return data
 
 def create_data():
   print('The file will be created in the files folder')
@@ -39,6 +50,15 @@ def create_data():
 
 def input_data():
   choose_algorythm(get_user_data())
+
+def validate_data(data):
+    area = 0
+    for i in range(1, len(data)):
+        if data[i][0] > data[0][0] or data[i][1] > data[0][0] or data[i][1] > data[0][0] or data[i][0] > data[0][1]:
+            return False
+        area += data[i][0] * data[i][1]
+
+    return not area > data[0][0] * data[0][1]
 
 def get_user_data():
   data = []
@@ -55,25 +75,42 @@ def get_user_data():
   return data
 
 def choose_algorythm(data):
+  if not validate_data(data):
+      print('Error in data')
+      return
   option = print_choose_algorythm()
   if len(option) > 2:
     print('Invalid option')
     choose_algorythm(data)
   if '1' in option:
+    start = time.time()
     hill_climbing_old_heuristic.main(data[0][0], data[0][1], data[1::])
   elif '2' in option:
+    start = time.time()
     hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], False)
   elif '3' in option:
+    start = time.time()
     hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], True)
+  elif '4' in option:
+    start = time.time()
+    genetic_algorithm.main(data[0][0], data[0][1], data[1::])
+  elif '5' in option:
+    start = time.time()
+    one_step.main(data[0][0], data[0][1], data[1::])
   else:
     print('Invalid option')
     choose_algorythm(data)
+  
+  end = time.time()
+  print('Ellapsed time: %.2f seconds' % (end - start))
 
 def print_choose_algorythm():
   print('Select option:')
   print('    1. Hill Climbing (old heuristic)')
   print('    2. Hill Climbing (new heuristic)')
-  print('    3. Arrefecimento Simulado (new heuristic)')
+  print('    3. Simulated Annealing (new heuristic)')
+  print('    4. Genetic Algorithm')
+  print('    5. One Step')
   return input()
 
 def print_main_menu():

@@ -5,17 +5,14 @@ import population_structure as ps
 import ui
 
 # define
-grid_height = 10
-grid_width = 10
-
-population_size = 30
+population_size = 10
 limit_of_generations = 1000
 fitness_limit = 5000
-no_stable_generations = 1000
+no_stable_generations = 50
 
 elitist_rate = 0.1
-survival_rate = 0.5
-mutation_rate = 1
+survival_rate = 0.7
+mutation_rate = 0.2
 
 def fitness_and_placement(population):
   for individual in population:
@@ -27,7 +24,7 @@ def selection(population):
   population = sorted(population, key=lambda individual: individual.heuristic, reverse=False)
   
   i = 0
-  for individual in population:
+  for _ in population:
     if i > elitist_rate*population_size:
       if random.random() > survival_rate/i:
         del population[i]
@@ -55,23 +52,27 @@ def crossover(population):
   return population
 
 def mutation(population):
-  i=0
-  for individual in population:
-    if i > elitist_rate*population_size:
-      element_1 = random.randint(0, len(individual.items)-1)
-      element_2 = random.randint(0, len(individual.items)-1)
-      individual.items[element_1], individual.items[element_2] = individual.items[element_2], individual.items[element_1]
-    i+=1
-  return population
+    i = 0
+    for individual in population:
+        if i > elitist_rate * population_size:
+            swap_random_elements(individual)
+            swap_random_elements(individual)
+            swap_random_elements(individual)
+        i += 1
+    return population
+
+def swap_random_elements(individual):
+    element_1 = random.randint(0, len(individual.items) - 1)
+    element_2 = random.randint(0, len(individual.items) - 1)
+    individual.items[element_1], individual.items[element_2] = individual.items[element_2], individual.items[element_1]
 
 
-def main():
-  # test objects
-  items = [[1,1], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [1,1]]
+def main(grid_height, grid_width, items):
 
   # population initialization
   population = []
   stable_point = 0
+  stable_generation = 0
   best = 99999
   for _ in range(population_size):
     individual = ps.Set(grid_height, grid_width, items, False)
@@ -88,6 +89,8 @@ def main():
       best = population[0].heuristic
       ui.print_set(population[0])
 
+    # exiting clauses
+    # # stabilization arround a certain heuristic
     if population[0].heuristic != stable_point:
       stable_point = population[0].heuristic
       stable_generation = generation
@@ -97,6 +100,5 @@ def main():
     # calculate next generation
     population = selection(population)
     population = crossover(population)
+    population = mutation(population)
 
-
-main()
