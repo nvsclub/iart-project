@@ -51,3 +51,5 @@ def main(grid_height, grid_width, requested_objects):
 
     ui.print_div('BEST ITERATION')
     ui.print_set(set)
+
+    return set

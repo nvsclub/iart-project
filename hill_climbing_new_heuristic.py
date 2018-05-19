@@ -58,3 +58,5 @@ def main(grid_height, grid_width, requested_objects, arrefecimento):
 
     ui.print_div("FINAL")
     ui.print_set(set)
+
+    return set

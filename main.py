@@ -2,9 +2,10 @@ import population_structure as ps
 import hill_climbing_old_heuristic
 import hill_climbing_new_heuristic
 import genetic_algorithm
-import one_step
+import random_algorythm
 import sys
 import time
+import ui
 
 def main():
   if(len(sys.argv) == 2):
@@ -84,24 +85,25 @@ def choose_algorythm(data):
     choose_algorythm(data)
   if '1' in option:
     start = time.time()
-    hill_climbing_old_heuristic.main(data[0][0], data[0][1], data[1::])
+    result = hill_climbing_old_heuristic.main(data[0][0], data[0][1], data[1::])
   elif '2' in option:
     start = time.time()
-    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], False)
+    result = hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], False)
   elif '3' in option:
     start = time.time()
-    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], True)
+    result = hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], True)
   elif '4' in option:
     start = time.time()
-    genetic_algorithm.main(data[0][0], data[0][1], data[1::])
+    result = genetic_algorithm.main(data[0][0], data[0][1], data[1::])
   elif '5' in option:
     start = time.time()
-    one_step.main(data[0][0], data[0][1], data[1::])
+    result = random_algorythm.main(data[0][0], data[0][1], data[1::])
   else:
     print('Invalid option')
     choose_algorythm(data)
   
   end = time.time()
+  ui.print_objects(result)
   print('Ellapsed time: %.2f seconds' % (end - start))
 
 def print_choose_algorythm():
@@ -110,7 +112,7 @@ def print_choose_algorythm():
   print('    2. Hill Climbing (new heuristic)')
   print('    3. Simulated Annealing (new heuristic)')
   print('    4. Genetic Algorithm')
-  print('    5. One Step')
+  print('    5. Random')
   return input()
 
 def print_main_menu():

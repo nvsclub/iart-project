@@ -102,3 +102,5 @@ def main(grid_height, grid_width, items):
     population = crossover(population)
     population = mutation(population)
 
+  return population[0]
+

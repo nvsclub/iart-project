@@ -1,6 +1,7 @@
 import random
 import copy
 import sys
+
 class Set:
     def __init__(self, grid_height, grid_width, requested_objects, is_random):
         self.items = []
@@ -90,21 +91,21 @@ class Set:
 
     def get_pivot_points(self):
         pivots = []
-        last_has_one = True
+        last_has_one, last_first_zero = True, [-1, -1]
 
         for y in range(self.height):
-            first_zero = None
-            has_one = False
+            first_zero, has_one = [-1, -1], False
             for x in range(self.width):
-                if self.representation[y][x] == 0 and first_zero == None:
+                if self.representation[y][x] == 0 and first_zero == [-1, -1]:
                     first_zero = [x, y]
                 if self.representation[y][x] == 1 and not has_one:
                     has_one = True
 
-            if last_has_one and not first_zero == None:
+            if ( last_has_one and not first_zero == [-1, -1] and not first_zero[0] == last_first_zero[0] ) or (  ):
                 pivots.append(first_zero)
 
             last_has_one = has_one
+            last_first_zero = first_zero
 
         return pivots
 
