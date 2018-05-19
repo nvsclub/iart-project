@@ -50,7 +50,10 @@ def print_objects(individual):
 
 def print_set(set):
     print_grid(set.representation)
-    term.write( term.bgblue + 'Heuristic: %d' % set.heuristic + term.off + '\n')
+    print_tooltip('Heuristic: %d' % set.heuristic)
+
+def print_tooltip(string):
+    term.write( term.bgblue + string + term.off + '\n')
 
 def center_element(size):
     return int((term.getSize()[1] - size) / 2)
