@@ -1,7 +1,7 @@
 import random
 import copy
 import population_structure as ps
-import ui_windows as ui
+import ui
 
 
 def list_successors(set):
@@ -30,6 +30,7 @@ def ciclo_hill_climbing(set):
         best = find_best(successors)
         if (set.heuristic < best.heuristic):
             set = best
+            ui.print_set(set)
         else:
             break
     return set
@@ -37,8 +38,7 @@ def ciclo_hill_climbing(set):
 def main(grid_height, grid_width, requested_objects, arrefecimento):
     set = ps.Set(grid_height, grid_width, requested_objects, False)
     set.place_objects()
-    print("set inicial:")
-    print("heuristica: " + str(set.heuristic))
+    ui.print_div("INICIAL")
     ui.print_set(set)
     i= 0
     while( i <= 50):
@@ -55,8 +55,5 @@ def main(grid_height, grid_width, requested_objects, arrefecimento):
         set.place_objects()
         i = i + 1
 
-
-
-    print("novo set: ")
-    ui.print_set(set_final)
-    print("heuristica: " + str(set_final.heuristic))
+    ui.print_div("FINAL")
+    ui.print_set(set)
