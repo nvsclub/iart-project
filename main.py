@@ -2,8 +2,13 @@ import population_structure as ps
 import hill_climbing_old_heuristic
 import hill_climbing_new_heuristic
 import genetic_algorithm
+import sys
 
 def main():
+  if(len(sys.argv) == 2):
+    choose_algorythm(read_file(sys.argv[1]))
+    return
+
   option = print_main_menu()
 
   if len(option) > 2:
@@ -19,14 +24,17 @@ def main():
 
 def read_data():
   print('Files should be placed in files folder, and be of type txt')
-  filepath = 'files/' + input('Name of the file to read? ') + '.txt'
+  choose_algorythm(read_file(input('Name of the file to read? ')))
+
+def read_file(file_name):
+  filepath = 'files/' + file_name + '.txt'
   data = []
   with open(filepath) as fp:
     line = fp.readline()
     while line:
       data.append([int(i) for i in line.strip().split(' ')])
       line = fp.readline()
-  choose_algorythm(data)
+  return data
 
 def create_data():
   print('The file will be created in the files folder')
