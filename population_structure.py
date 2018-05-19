@@ -6,7 +6,7 @@ class Set:
     self.items = []
     self.height = grid_height
     self.width = grid_width
-    self.heuristic = 0
+    self.heuristic = 1#(grid_width+1)*(grid_height+1)+(grid_width+1)+(grid_height+1)
 
     for i in range(len(requested_objects)):
       self.items.append(Object(self, i, requested_objects[i], is_random))
@@ -65,6 +65,7 @@ class Set:
 
   def calculate_heuristic(self, bestHeuristic):
     self.heuristic = bestHeuristic
+
     for y in range(self.height):
       consecutive_zeros = 0
       for x in range(self.width):
@@ -73,7 +74,7 @@ class Set:
         if self.representation[y][x] == 1 and consecutive_zeros > 0:
           self.heuristic += consecutive_zeros
           consecutive_zeros = 0
-          
+ 
     for x in range(self.height):
       consecutive_zeros = 0
       for y in range(self.width):
@@ -134,7 +135,7 @@ class Set:
             new_representation[y][x] += 1
         placement1 = self.case_heuristic(new_representation, self.width, self.height)
       else:
-        placement1 = best_heuristic
+        placement1 = (self.width+1) * (self.height+1) + (self.width+1) + (self.height+1)
       heuristic_list.append(placement1) 
 
       new_representation = copy.deepcopy(self.representation)
@@ -144,7 +145,7 @@ class Set:
             new_representation[y][x] += 1
         placement2 = self.case_heuristic(new_representation, self.width, self.height)
       else:
-        placement2 = best_heuristic
+        placement2 = (self.width+1) * (self.height+1) + (self.width+1) + (self.height+1)
       heuristic_list.append(placement2)
 
     i = 0
@@ -154,7 +155,7 @@ class Set:
         pivot_no = i
       i += 1
 
-    #print(pivot_points)
+    # print(heuristic_list)
 
     if pivot_no == -1:
       return -1, -1, False

@@ -5,13 +5,10 @@ import population_structure as ps
 import ui
 
 # define
-grid_height = 10
-grid_width = 10
-
 population_size = 10
 limit_of_generations = 1000
 fitness_limit = 5000
-no_stable_generations = 25
+no_stable_generations = 50
 
 elitist_rate = 0.1
 survival_rate = 0.5
@@ -19,7 +16,8 @@ mutation_rate = 0.1
 
 def fitness_and_placement(population):
   for individual in population:
-    individual.place_objects()
+    e = individual.place_objects()
+    print(e)
     #if individual.place_objects() == -1:
       #print("Incompatible Solution")
   return population
@@ -67,13 +65,12 @@ def mutation(population):
   return population
 
 
-def main():
-  # test objects
-  items = [[1,1], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [1,1]]
+def main(grid_height, grid_width, items):
 
   # population initialization
   population = []
   stable_point = 0
+  stable_generation = 0
   best = 99999
   for _ in range(population_size):
     individual = ps.Set(grid_height, grid_width, items, False)
@@ -87,9 +84,9 @@ def main():
       for ii in range(len(individual.items)):
         heuristics.append(individual.items[ii].id)
       print(generation, heuristics)
-      heuristics = []'''
+      heuristics = []
 
-    print(generation)
+    print(generation)'''
     # refresh population fitnesses and representations
     fitness_and_placement(population)
 
@@ -98,20 +95,16 @@ def main():
       best = population[0].heuristic
       ui.print_set(population[0])
 
-
-
     # exiting clauses
     # # stabilization arround a certain heuristic
-    '''if population[0].heuristic != stable_point:
+    if population[0].heuristic != stable_point:
       stable_point = population[0].heuristic
       stable_generation = generation
     if generation - stable_generation >= no_stable_generations:
-      break'''
+      break
 
     # calculate next generation
     population = selection(population)
     population = crossover(population)
     population = mutation(population)
 
-
-main()

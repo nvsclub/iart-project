@@ -2,7 +2,7 @@ import population_structure as ps
 import ui
 
 # test objects
-items = [[1,1], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [1,1]]
+items = [[1,1], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [3,3], [1,1], [7,1], [7,1], [7,1], [7,1], [7,1]]
 grid_height = 10
 grid_width = 10
 

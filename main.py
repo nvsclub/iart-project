@@ -1,6 +1,7 @@
 import population_structure as ps
 import hill_climbing_old_heuristic
 import hill_climbing_new_heuristic
+import genetic_algorithm
 
 def main():
   option = print_main_menu()
@@ -63,6 +64,8 @@ def choose_algorythm(data):
     hill_climbing_old_heuristic.main(data[0][0], data[0][1], data[1::])
   elif '2' in option:
     hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::])
+  elif '3' in option:
+    genetic_algorithm.main(data[0][0], data[0][1], data[1::])
   else:
     print('Invalid option')
     choose_algorythm(data)
@@ -71,6 +74,7 @@ def print_choose_algorythm():
   print('Select option:')
   print('    1. Hill Climbing (old heuristic)')
   print('    2. Hill Climbing (new heuristic)')
+  print('    3. Genetic Algorithm')
   return input()
 
 def print_main_menu():
