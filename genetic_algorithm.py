@@ -8,14 +8,14 @@ import ui
 grid_height = 10
 grid_width = 10
 
-population_size = 30
+population_size = 10
 limit_of_generations = 1000
 fitness_limit = 5000
-no_stable_generations = 1000
+no_stable_generations = 25
 
 elitist_rate = 0.1
 survival_rate = 0.5
-mutation_rate = 1
+mutation_rate = 0.1
 
 def fitness_and_placement(population):
   for individual in population:
@@ -82,11 +82,14 @@ def main():
 
   # run though generations
   for generation in range(limit_of_generations):
-    heuristics = []
+    '''heuristics = []
     for individual in population:
-      heuristics.append(individual.heuristic)
+      for ii in range(len(individual.items)):
+        heuristics.append(individual.items[ii].id)
+      print(generation, heuristics)
+      heuristics = []'''
 
-    print(generation, heuristics)
+    print(generation)
     # refresh population fitnesses and representations
     fitness_and_placement(population)
 
@@ -108,6 +111,7 @@ def main():
     # calculate next generation
     population = selection(population)
     population = crossover(population)
+    population = mutation(population)
 
 
 main()
