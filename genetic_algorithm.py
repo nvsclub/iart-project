@@ -76,17 +76,11 @@ def main(grid_height, grid_width, items):
 
   # run though generations
   for generation in range(limit_of_generations):
-    '''heuristics = []
-    for individual in population:
-      for ii in range(len(individual.items)):
-        heuristics.append(individual.items[ii].id)
-      print(generation, heuristics)
-      heuristics = []
-
-    print(generation)'''
+    print('not dead yet' + str(generation))
     # refresh population fitnesses and representations
     fitness_and_placement(population)
 
+    print('not dead yet: passed fit and place')
     # ui interface
     if population[0].heuristic < best:
       best = population[0].heuristic
@@ -99,6 +93,8 @@ def main(grid_height, grid_width, items):
       stable_generation = generation
     if generation - stable_generation >= no_stable_generations:
       break
+
+    print('not dead yet: survived ui')
 
     # calculate next generation
     population = selection(population)

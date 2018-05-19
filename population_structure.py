@@ -76,9 +76,9 @@ class Set:
           self.heuristic += consecutive_zeros
           consecutive_zeros = 0
  
-    for x in range(self.height):
+    for y in range(self.height):
       consecutive_zeros = 0
-      for y in range(self.width):
+      for x in range(self.width):
         if self.representation[y][x] == 0:
           consecutive_zeros += 1
         if self.representation[y][x] == 1 and consecutive_zeros > 0:
