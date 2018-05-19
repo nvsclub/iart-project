@@ -62,7 +62,9 @@ def choose_algorythm(data):
   if '1' in option:
     hill_climbing_old_heuristic.main(data[0][0], data[0][1], data[1::])
   elif '2' in option:
-    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::])
+    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], False)
+  elif '3' in option:
+    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], True)
   else:
     print('Invalid option')
     choose_algorythm(data)
@@ -71,6 +73,7 @@ def print_choose_algorythm():
   print('Select option:')
   print('    1. Hill Climbing (old heuristic)')
   print('    2. Hill Climbing (new heuristic)')
+  print('    3. Arrefecimento Simulado (new heuristic)')
   return input()
 
 def print_main_menu():

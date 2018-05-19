@@ -19,19 +19,12 @@ def new_successor(set, item_1, item_2):
 
 def find_best(successors):
     best = successors[0]
-    ui.print_div('SUCCESSORS')
     for successor in successors:
-        ui.print_set(successor)
         if successor.heuristic >= best.heuristic:
             best = successor
     return best
 
-def main(grid_height, grid_width, requested_objects):
-    set = ps.Set(grid_height, grid_width, requested_objects, False)
-    set.place_objects()
-    print("set inicial:")
-    print("heuristica: " + str(set.heuristic))
-    ui.print_set(set)
+def ciclo_hill_climbing(set):
     while (True):
         successors = list_successors(set)
         best = find_best(successors)
@@ -39,7 +32,31 @@ def main(grid_height, grid_width, requested_objects):
             set = best
         else:
             break
-            
-    print("novo set: ")
+    return set
+
+def main(grid_height, grid_width, requested_objects, arrefecimento):
+    set = ps.Set(grid_height, grid_width, requested_objects, False)
+    set.place_objects()
+    print("set inicial:")
+    print("heuristica: " + str(set.heuristic))
     ui.print_set(set)
-    print("heuristica: " + str(best.heuristic))
+    i= 0
+    while( i <= 50):
+        set_aux = ciclo_hill_climbing(set)
+        if(i == 0):
+            set_final = set_aux
+        else:
+            if (set_final.heuristic < set_aux.heuristic):
+                set_final = set_aux
+                i = 0
+        if arrefecimento == False:
+            break
+        set.shuffle()
+        set.place_objects()
+        i = i + 1
+
+
+
+    print("novo set: ")
+    ui.print_set(set_final)
+    print("heuristica: " + str(set_final.heuristic))
