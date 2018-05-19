@@ -42,27 +42,14 @@ class Set:
 
     def calculate_old_heuristic(self):
         self.heuristic = 0
-        for y in range(self.height):
-            line_val = 5
-            for x in range(self.width):
-                if self.representation[y][x] > 1:
-                    self.heuristic += -(self.representation[y][x] ** 5)
-                if self.representation[y][x] == 1:
-                    self.heuristic += 2 ** (self.height - y)
-                    line_val *= 2
-                if self.representation[y][x] == 0 and line_val > 2:
-                    self.heuristic += line_val
-                    line_val = 2
 
-        for x in range(self.width):
-            col_val = 5
-            for y in range(self.height):
+        for y in range(self.height):
+            for x in range(self.width):
+                if self.representation[y][x] > 1: # Adds per overlap space
+                    self.heuristic += self.representation[y][x] * self.width * self.height
+
                 if self.representation[y][x] == 1:
-                    col_val *= 2
-                    self.heuristic += 2 ** (self.width - x)
-                if self.representation[y][x] == 0 and line_val > 2:
-                    self.heuristic += col_val
-                    col_val = 2
+                    self.heuristic += x + y * self.width
 
     def calculate_heuristic(self, bestHeuristic):
         self.heuristic = bestHeuristic
@@ -233,10 +220,6 @@ class Object:
         if self.x + self.height >= self.set.width or self.y + self.width >= self.set.height:
             return
         else:
-            a = self.width
-            self.width = self.height
-            self.height = a
-
-            self.y = self.y - self.width + 1
+            self.width, self.height = self.height, self.width
 
             self.generate_grid()
