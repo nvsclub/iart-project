@@ -18,14 +18,14 @@ def new_successor(set, dx, dy, item):
     successor = copy.deepcopy(set)
     successor.items[item].move(dx, dy)
     successor.generate_representation()
-    successor.calculate_old_heuristic()
+    successor.calculate_heuristic()
     return successor
 
 def new_successor_rotate(set, item):
     successor = copy.deepcopy(set)
     successor.items[item].rotate()
     successor.generate_representation()
-    successor.calculate_old_heuristic()
+    successor.calculate_heuristic()
     return successor
 
 def find_best(successors):

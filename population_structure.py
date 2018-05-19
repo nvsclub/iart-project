@@ -78,9 +78,9 @@ class Set:
                     self.heuristic += consecutive_zeros
                     consecutive_zeros = 0
 
-        for x in range(self.height):
+        for x in range(self.width):
             consecutive_zeros = 0
-            for y in range(self.width):
+            for y in range(self.height):
                 if self.representation[y][x] == 0:
                     consecutive_zeros += 1
                 if self.representation[y][x] == 1 and consecutive_zeros > 0:
@@ -105,7 +105,6 @@ class Set:
 
     def get_pivot_points(self):
         pivots = []
-        disable_pivot = False
         last_has_one = True
 
         for y in range(self.height):

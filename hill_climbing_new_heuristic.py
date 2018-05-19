@@ -24,12 +24,7 @@ def find_best(successors):
             best = successor
     return best
 
-def main(grid_height, grid_width, requested_objects):
-    set = ps.Set(grid_height, grid_width, requested_objects, False)
-    set.shuffle()
-    set.place_objects()
-    ui.print_div("INICIAL")
-    ui.print_set(set)
+def ciclo_hill_climbing(set):
     while (True):
         successors = list_successors(set)
         best = find_best(successors)
@@ -38,5 +33,27 @@ def main(grid_height, grid_width, requested_objects):
             ui.print_set(set)
         else:
             break
+    return set
+
+def main(grid_height, grid_width, requested_objects, arrefecimento):
+    set = ps.Set(grid_height, grid_width, requested_objects, False)
+    set.place_objects()
+    ui.print_div("INICIAL")
+    ui.print_set(set)
+    i= 0
+    while( i <= 50):
+        set_aux = ciclo_hill_climbing(set)
+        if(i == 0):
+            set_final = set_aux
+        else:
+            if (set_final.heuristic < set_aux.heuristic):
+                set_final = set_aux
+                i = 0
+        if arrefecimento == False:
+            break
+        set.shuffle()
+        set.place_objects()
+        i = i + 1
+
     ui.print_div("FINAL")
     ui.print_set(set)
