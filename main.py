@@ -1,14 +1,8 @@
 import population_structure as ps
 import hill_climbing_old_heuristic
 import hill_climbing_new_heuristic
-import genetic_algorithm
-import sys
 
 def main():
-  if(len(sys.argv) == 2):
-    choose_algorythm(read_file(sys.argv[1]))
-    return
-
   option = print_main_menu()
 
   if len(option) > 2:
@@ -24,17 +18,14 @@ def main():
 
 def read_data():
   print('Files should be placed in files folder, and be of type txt')
-  choose_algorythm(read_file(input('Name of the file to read? ')))
-
-def read_file(file_name):
-  filepath = 'files/' + file_name + '.txt'
+  filepath = 'files/' + input('Name of the file to read? ') + '.txt'
   data = []
   with open(filepath) as fp:
     line = fp.readline()
     while line:
       data.append([int(i) for i in line.strip().split(' ')])
       line = fp.readline()
-  return data
+  choose_algorythm(data)
 
 def create_data():
   print('The file will be created in the files folder')
@@ -71,9 +62,9 @@ def choose_algorythm(data):
   if '1' in option:
     hill_climbing_old_heuristic.main(data[0][0], data[0][1], data[1::])
   elif '2' in option:
-    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::])
+    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], False)
   elif '3' in option:
-    genetic_algorithm.main(data[0][0], data[0][1], data[1::])
+    hill_climbing_new_heuristic.main(data[0][0], data[0][1], data[1::], True)
   else:
     print('Invalid option')
     choose_algorythm(data)
@@ -82,7 +73,7 @@ def print_choose_algorythm():
   print('Select option:')
   print('    1. Hill Climbing (old heuristic)')
   print('    2. Hill Climbing (new heuristic)')
-  print('    3. Genetic Algorithm')
+  print('    3. Arrefecimento Simulado (new heuristic)')
   return input()
 
 def print_main_menu():
