@@ -1,12 +1,17 @@
 import random
 import copy
+import sys
 
 class Set:
   def __init__(self, grid_height, grid_width, requested_objects, is_random):
     self.items = []
     self.height = grid_height
     self.width = grid_width
+<<<<<<< HEAD
     self.heuristic = 0
+=======
+    self.heuristic = sys.maxsize
+>>>>>>> 8c345ef1e716f29c5e57b2f13fab14fa69b77908
 
     for i in range(len(requested_objects)):
       self.items.append(Object(self, i, requested_objects[i], is_random))
@@ -91,6 +96,7 @@ class Set:
       best_heuristic, best_pivot, rotate = self.best_scenario(item, pivot_points)
 
       if best_heuristic == -1:
+        self.calculate_heuristic((self.width+1)*(self.height+1)+(self.width+1)+(self.height+1))
         return -1
 
       item.place(best_pivot[0], best_pivot[1], rotate)
