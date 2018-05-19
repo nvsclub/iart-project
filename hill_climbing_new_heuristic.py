@@ -20,7 +20,7 @@ def new_successor(set, item_1, item_2):
 def find_best(successors):
     best = successors[0]
     for successor in successors:
-        if successor.heuristic >= best.heuristic:
+        if successor.heuristic <= best.heuristic:
             best = successor
     return best
 
@@ -28,9 +28,8 @@ def ciclo_hill_climbing(set):
     while (True):
         successors = list_successors(set)
         best = find_best(successors)
-        if (set.heuristic < best.heuristic):
+        if (set.heuristic > best.heuristic):
             set = best
-            ui.print_set(set)
         else:
             break
     return set
@@ -48,7 +47,9 @@ def main(grid_height, grid_width, requested_objects, arrefecimento):
             set_final = set_aux
         else:
             if set_aux.heuristic < set_final.heuristic:
+                print("Encontrada nova solução:")
                 set_final = set_aux
+                ui.print_set(set_final)
                 i = 0
         if arrefecimento == False:
             break
@@ -57,6 +58,9 @@ def main(grid_height, grid_width, requested_objects, arrefecimento):
         i = i + 1
 
     ui.print_div("FINAL")
-    ui.print_set(set)
+    ui.print_set(set_final)
 
     return set
+
+
+
