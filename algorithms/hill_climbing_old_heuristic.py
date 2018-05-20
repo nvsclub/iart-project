@@ -1,7 +1,5 @@
 import random
 import copy
-import population_structure as ps
-import ui
 
 def list_successors(set):
     successors = []
@@ -30,26 +28,22 @@ def new_successor_rotate(set, item):
 
 def find_best(successors):
     best = successors[0]
-    ui.print_div("SUCCESSORS")
     for successor in successors:
-        ui.print_set(successor)
         if successor.heuristic < best.heuristic:
             best = successor
 
     return best
 
 def main(grid_height, grid_width, requested_objects):
-    set = ps.Set(grid_height, grid_width, requested_objects, True)
-    set.shuffle()
+    state = ps.Set(grid_height, grid_width, requested_objects, True)
+    state.shuffle()
     while(True):
-        best = find_best(list_successors(set))
-        ui.print_set(best)
-        if (set.heuristic > best.heuristic):
-            set = best
+        best = find_best(list_successors(state))
+        if (state.heuristic > best.heuristic):
+            state = best
+            ui.print_set(state)
         else:
             break
 
-    ui.print_div('BEST ITERATION')
-    ui.print_set(set)
+    return state
 
-    return set

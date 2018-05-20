@@ -1,7 +1,5 @@
 import random
 import copy
-import population_structure as ps
-import ui
 
 def list_successors(set):
     successors = []
@@ -24,27 +22,24 @@ def find_best(successors):
     return best
 
 def hill_climbing(set):
-    while (True):
-        successors = list_successors(set)
-        best = find_best(successors)
-        if (set.heuristic > best.heuristic):
-            ui.print_set(set)
-            set = best
-        else:
-            break
+    
     return set
 
 def main(grid_height, grid_width, requested_objects):
-    set = ps.Set(grid_height, grid_width, requested_objects, False)
-    set.shuffle()
-    set.place_objects()
-    ui.print_div("INICIAL")
-    set_final = hill_climbing(set)
+    state = ps.Set(grid_height, grid_width, requested_objects, False)
+    state.shuffle()
+    state.place_objects()
+    while (True):
+        best = find_best(list_successors(state))
+        if (state.heuristic > best.heuristic):
+            ui.print_set(state)
+            state = best
+        else:
+            break
 
-    ui.print_div("FINAL")
-    ui.print_set(set_final)
+    ui.print_set(state)
 
-    return set_final
+    return state
 
 
 

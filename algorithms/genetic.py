@@ -1,9 +1,6 @@
 import random
 import copy
 
-import population_structure as ps
-import ui
-
 # define
 population_size = 10
 limit_of_generations = 1000

@@ -1,7 +1,5 @@
 import random
 import copy
-import population_structure as ps
-import ui
 import math
 
 def new_successor(state):
@@ -22,29 +20,26 @@ def main(grid_height, grid_width, requested_objects):
     state.shuffle()
     state.place_objects()
 
-    ui.print_div("INICIAL")
     ui.print_set(state)
-    ui.print_tooltip('Temperature: %.1f' % temperature)
+    ui.print_tooltip('Temperature: %d' % temperature)
 
     while temperature > 0:
         next_state = new_successor(state)
         delta_e = state.heuristic - next_state.heuristic 
 
-        print('exp: %.2f' % -(delta_e / temperature))
-
         if delta_e > 0:
             state = next_state
             ui.print_set(state)
-            ui.print_tooltip('Temperature: %.1f' % temperature)
+            ui.print_tooltip('Temperature: %d' % temperature)
         elif random.random() < math.exp(delta_e / temperature):
             state = next_state
             ui.print_set(state)
-            ui.print_tooltip('Temperature: %.1f' % temperature)
+            ui.print_tooltip('Temperature: %d' % temperature)
 
         temperature -= 1
     
-    ui.print_div("FINAL")
     ui.print_set(state)
+    ui.print_tooltip('Temperature: %d' % temperature)
     return state
 
 

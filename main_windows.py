@@ -1,6 +1,6 @@
 import sys
 import time
-import ui.ui as ui
+import ui.ui_windows as ui
 
 import population_structure as ps
 
