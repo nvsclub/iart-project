@@ -9,9 +9,9 @@ def print_grid(grid):
     
     print(print_bundle, end='')
 
-def print_set(set):
-    print_grid(set.representation)
-    print_tooltip('Heuristic: %d' % set.heuristic)
+def print_state(state):
+    print_grid(state.representation)
+    print_tooltip('Heuristic: %d' % state.heuristic)
 
 def print_tooltip(string):
     print(string + '\n', end='')

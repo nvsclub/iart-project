@@ -2,7 +2,7 @@ import random
 import copy
 import sys
 
-class Set:
+class State:
     def __init__(self, grid_height, grid_width, requested_objects, is_random):
         self.items = []
         self.height = grid_height
@@ -163,8 +163,8 @@ class Set:
 
 
 class Object:
-    def __init__(self, set, id, size, is_random):
-        self.set = set
+    def __init__(self, state, id, size, is_random):
+        self.state = state
 
         self.height = size[1]
         self.width = size[0]
@@ -172,8 +172,8 @@ class Object:
         self.id = id
 
         if is_random:
-            self.x = random.randint(0, self.set.width - self.width - 1)
-            self.y = random.randint(0, self.set.height - self.height - 1)
+            self.x = random.randint(0, self.state.width - self.width - 1)
+            self.y = random.randint(0, self.state.height - self.height - 1)
         else:
             self.x = None
             self.y = None
@@ -196,7 +196,7 @@ class Object:
             self.grid = None
             return
 
-        self.grid = [[0 for i in range(self.set.width)] for j in range(self.set.height)]
+        self.grid = [[0 for i in range(self.state.width)] for j in range(self.state.height)]
         for i in range(self.y, self.y + self.height):
             for j in range(self.x, self.x + self.width):
                 self.grid[i][j] = 1
@@ -209,7 +209,7 @@ class Object:
         self.generate_grid()
 
     def move(self, dx, dy):
-        if dx + self.x + self.width - 1 >= self.set.width or dy + self.y + self.height - 1 >= self.set.height or dx + self.x < 0 or dy + self.y < 0:
+        if dx + self.x + self.width - 1 >= self.state.width or dy + self.y + self.height - 1 >= self.state.height or dx + self.x < 0 or dy + self.y < 0:
             return
         else:
             self.x += dx
@@ -218,7 +218,7 @@ class Object:
 
     # falta rodar sobre varios eixos
     def rotate(self):
-        if self.x + self.height >= self.set.width or self.y + self.width >= self.set.height:
+        if self.x + self.height >= self.state.width or self.y + self.width >= self.state.height:
             return
         else:
             self.width, self.height = self.height, self.width

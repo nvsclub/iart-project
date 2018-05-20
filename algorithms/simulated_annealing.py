@@ -16,11 +16,11 @@ def new_successor(state):
 
 def main(grid_height, grid_width, requested_objects):
     temperature = grid_height * grid_width
-    state = ps.Set(grid_height, grid_width, requested_objects, False)
+    state = ps.State(grid_height, grid_width, requested_objects, False)
     state.shuffle()
     state.place_objects()
 
-    ui.print_set(state)
+    ui.print_state(state)
     ui.print_tooltip('Temperature: %d' % temperature)
 
     while temperature > 0:
@@ -29,16 +29,16 @@ def main(grid_height, grid_width, requested_objects):
 
         if delta_e > 0:
             state = next_state
-            ui.print_set(state)
+            ui.print_state(state)
             ui.print_tooltip('Temperature: %d' % temperature)
         elif random.random() < math.exp(delta_e / temperature):
             state = next_state
-            ui.print_set(state)
+            ui.print_state(state)
             ui.print_tooltip('Temperature: %d' % temperature)
 
         temperature -= 1
     
-    ui.print_set(state)
+    ui.print_state(state)
     ui.print_tooltip('Temperature: %d' % temperature)
     return state
 

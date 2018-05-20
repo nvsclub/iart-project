@@ -17,15 +17,15 @@ def print_grid(grid):
     
     term.write(print_bundle)
 
-def print_objects(individual):
-    grid = [[0 for i in range(individual.width)] for j in range(individual.height)]
-    for item in individual.items:
+def print_objects(state):
+    grid = [[0 for i in range(state.width)] for j in range(state.height)]
+    for item in state.items:
         for i in range(item.y, item.y + item.height):
             for j in range(item.x, item.x + item.width):
                 if grid[i][j] == 0:
                     grid[i][j] = item.id + 1
                 else:
-                    if type(grid[i][j]) is list:
+                    if type(grid[i][j]) is list or grid[i][j] == None:
                         grid[i][j] = None
                     else:
                         grid[i][j] = [grid[i][j], item.id + 1]
@@ -48,9 +48,9 @@ def print_objects(individual):
     
     term.write(print_bundle)
 
-def print_set(set):
-    print_grid(set.representation)
-    print_tooltip('Heuristic: %d' % set.heuristic)
+def print_state(state):
+    print_grid(state.representation)
+    print_tooltip('Heuristic: %d' % state.heuristic)
 
 def print_tooltip(string):
     term.write( term.bgblue + string + term.off + '\n')

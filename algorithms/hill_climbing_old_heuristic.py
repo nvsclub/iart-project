@@ -1,26 +1,26 @@
 import random
 import copy
 
-def list_successors(set):
+def list_successors(state):
     successors = []
-    for i in range(0, len(set.items)):
-        successors.append(new_successor(set, 1, 0, i))
-        successors.append(new_successor(set, -1, 0, i))
-        successors.append(new_successor(set, 0, 1, i))
-        successors.append(new_successor(set, 0, -1, i))
-        successors.append(new_successor_rotate(set, i))
+    for i in range(0, len(state.items)):
+        successors.append(new_successor(state, 1, 0, i))
+        successors.append(new_successor(state, -1, 0, i))
+        successors.append(new_successor(state, 0, 1, i))
+        successors.append(new_successor(state, 0, -1, i))
+        successors.append(new_successor_rotate(state, i))
     return successors
 
 
-def new_successor(set, dx, dy, item):
-    successor = copy.deepcopy(set)
+def new_successor(state, dx, dy, item):
+    successor = copy.deepcopy(state)
     successor.items[item].move(dx, dy)
     successor.generate_representation()
     successor.calculate_old_heuristic()
     return successor
 
-def new_successor_rotate(set, item):
-    successor = copy.deepcopy(set)
+def new_successor_rotate(state, item):
+    successor = copy.deepcopy(state)
     successor.items[item].rotate()
     successor.generate_representation()
     successor.calculate_old_heuristic()
@@ -35,13 +35,13 @@ def find_best(successors):
     return best
 
 def main(grid_height, grid_width, requested_objects):
-    state = ps.Set(grid_height, grid_width, requested_objects, True)
+    state = ps.State(grid_height, grid_width, requested_objects, True)
     state.shuffle()
     while(True):
         best = find_best(list_successors(state))
         if (state.heuristic > best.heuristic):
             state = best
-            ui.print_set(state)
+            ui.print_state(state)
         else:
             break
 

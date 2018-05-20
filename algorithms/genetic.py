@@ -72,7 +72,7 @@ def main(grid_height, grid_width, items):
     stable_generation = 0
     best = 99999
     for _ in range(population_size):
-        individual = ps.Set(grid_height, grid_width, items, False)
+        individual = ps.State(grid_height, grid_width, items, False)
         individual.shuffle()
         population.append(individual)
 
@@ -84,7 +84,7 @@ def main(grid_height, grid_width, items):
         # ui interface
         if population[0].heuristic < best:
             best = population[0].heuristic
-            ui.print_set(population[0])
+            ui.print_state(population[0])
 
         # exiting clauses
         # # stabilization arround a certain heuristic
