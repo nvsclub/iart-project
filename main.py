@@ -34,7 +34,15 @@ def main():
         return
     elif len(sys.argv) == 3:
         start = time.time()
-        result = run_algorithm(sys.argv[2], read_file(sys.argv[1]))
+        data = read_file(sys.argv[1])
+        if data == None:
+            return
+
+        if not sys.argv[2] in ['1', '2', '3', '4', '5']:
+            print('Invalid arguments')
+            return
+
+        result = run_algorithm(sys.argv[2], data)
         
         end = time.time()
         ui.print_objects(result)
@@ -61,12 +69,16 @@ def read_data():
 def read_file(file_name):
     filepath = 'files/' + file_name + '.txt'
     data = []
-    with open(filepath) as fp:
-        line = fp.readline()
-        while line:
-            data.append([int(i) for i in line.strip().split(' ')])
+    try:
+        with open(filepath) as fp:
             line = fp.readline()
-    return data
+            while line:
+                data.append([int(i) for i in line.strip().split(' ')])
+                line = fp.readline()
+        return data
+    except IOError:
+        print("The file does not exist.")
+        return
 
 def create_data():
     print('The file will be created in the files folder')
@@ -105,6 +117,8 @@ def get_user_data():
     return data
 
 def choose_algorythm(data):
+    if data == None:
+        return
     if not validate_data(data):
         print('Error in data')
         return
